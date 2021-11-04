@@ -1,0 +1,79 @@
+<!DOCTYPE html >
+    <html>
+    <head>
+    <meta charset = "utf-8"/>
+    <style>
+    body 
+	{
+        background - color: #ffffff;
+        margin: 0;
+        overflow: hidden;
+    } </style> </head>
+    <body>
+
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+<script>
+
+var camera, scene, renderer;
+var geometria, material, mesh;
+var clock;
+function cono(x, y, z, px, py, pz, material, color, wf)
+{
+    geometria = new THREE.ConeGeometry( x, y, z );
+    switch(material) 
+    {
+    	case 'Basic': material = new THREE.MeshBasicMaterial({color: color, wireframe: wf}); break;
+    	case 'Standard': material = new THREE.MeshStandardMaterial({color: color, wireframe: wf}); break;
+    	case 'Physical': material = new THREE.MesPhysicalMaterial({color: color, wireframe: wf}); break;
+    	case 'Phong': material = new THREE.MeshPhongMaterial({color: color, wireframe: wf}); break;
+    	case 'Lambert': material = new THREE.MeshLambertMaterial({color: color, wireframe: wf}); break;
+    }
+    cone = new THREE.Mesh( geometria, material );
+    scene.add(cone);
+    cone.position.set(px, py, pz);
+    return cone;
+}
+
+
+
+function init() 
+{
+
+    renderer = new THREE.WebGLRenderer(); /* se crea y se renderiza la ventana*/
+    renderer.setSize(window.innerWidth*0.99, window.innerHeight*0.99);
+    document.body.appendChild(renderer.domElement);
+    scene = new THREE.Scene();
+
+
+    var arrCone = []; /* se crean los parametros del cono */
+    var z=12, x=5,y=7.5
+    arrCone.push(cono(x, y, z, 0,0,0,'Phong', ' 0xEAEFF2', false))
+
+
+    var angulo = Math.PI/2;
+
+    const axesHelper = new THREE.AxesHelper(30);
+    scene.add(axesHelper);
+    arrCone[0].rotateX(angulo);
+    arrCone[0].rotateY(360);
+    arrCone[0].position.set(0, 0, y/2);
+
+
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 10;
+    camera.position.y = 10;
+    camera.position.x = -10;
+    camera.lookAt(scene.position); /* se define la posicion de la camara */ 
+
+	var light = new THREE.PointLight(0xFFFFFF);
+	light.position.set(-5, 15, 40);
+	scene.add(light);/* se asigna la posicion de la iluminacion*/
+
+    renderer.render(scene, camera);
+}
+
+init();
+
+</script>
+</body>
+</html>
